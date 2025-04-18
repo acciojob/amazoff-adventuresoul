@@ -181,7 +181,6 @@ public class OrderRepository {
         int minutes = lastTime % 60;
 
         return String.format("%02d:%02d", hours, minutes);
-
     }
         
 }
