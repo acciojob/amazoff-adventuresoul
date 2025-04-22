@@ -33,17 +33,17 @@ public class OrderRepository {
 
     public void saveOrderPartnerMap(String orderId, String partnerId){
         if(orderMap.containsKey(orderId) && partnerMap.containsKey(partnerId)){
-            // your code here
-            //add order to given partner's order list
-            //increase order count of partner
-            //assign partner to this order
-            this.orderToPartnerMap.put(orderId, partnerId);
-            int presentOrders = this.partnerMap.get(partnerId).getNumberOfOrders();
-            this.partnerMap.get(partnerId).setNumberOfOrders(presentOrders+1);
-            
-            // ensure partner has orderId HashSet
+            // Ensure the partner has an orderId HashSet
             this.partnerToOrderMap.putIfAbsent(partnerId, new HashSet<>());
+
+            // Add order to the given partner's order list
             this.partnerToOrderMap.get(partnerId).add(orderId);
+
+            // Assign partner to this order
+            this.orderToPartnerMap.put(orderId, partnerId);
+
+            // Update the partner's number of orders based on the current size of the partner's order set
+            this.partnerMap.get(partnerId).setNumberOfOrders(this.partnerToOrderMap.get(partnerId).size());
         }
     }
 
@@ -78,9 +78,7 @@ public class OrderRepository {
     public List<String> findAllOrders(){
         // your code here
         // return list of all orders
-        List<String> ans = new ArrayList<>();
-        this.orderMap.forEach((Oid, delTime) -> ans.add(Oid));
-        return ans;
+        return new ArrayList<>(this.orderMap.keySet());
     }
 
     public void deletePartner(String partnerId){
@@ -174,7 +172,9 @@ public class OrderRepository {
         int lastTime = 0;
         for (String oid: orderIds) {
             Order order = this.orderMap.get(oid);
-            lastTime = Math.max(lastTime, order.getDeliveryTime());
+            if (order != null) {
+                lastTime = Math.max(lastTime, order.getDeliveryTime());
+            }
         }
 
         int hours = lastTime / 60;

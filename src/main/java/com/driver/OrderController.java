@@ -57,6 +57,10 @@ public class OrderController {
 
         DeliveryPartner deliveryPartner = orderService.getPartnerById(partnerId);
 
+        if (deliveryPartner == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
         //deliveryPartner should contain the value given by partnerId
 
         return new ResponseEntity<>(deliveryPartner, HttpStatus.CREATED);
