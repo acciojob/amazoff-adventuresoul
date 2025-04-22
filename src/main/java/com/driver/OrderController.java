@@ -22,7 +22,7 @@ public class OrderController {
 
     @Autowired
     public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+        this.orderService = new OrderService();
     }
     
 
@@ -60,7 +60,7 @@ public class OrderController {
         if (deliveryPartner == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
+
         //deliveryPartner should contain the value given by partnerId
 
         return new ResponseEntity<>(deliveryPartner, HttpStatus.CREATED);
